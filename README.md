@@ -1,0 +1,103 @@
+# CodePen Fetcher
+
+An unofficial CodePen tool built with TypeScript, capable of fetching basic information of Pens along with their HTML, CSS, and JS source code. It is designed for use in workflow automation tasks.
+  
+This tool uses a workaround approach to retrieve data via the `https://codepen.io/graphql` API.
+
+## Installation
+```bash
+$ npm install codepen-fetcher
+```
+
+## Usage
+### Fetch a pen
+Fetch a pen by its `penId`, which can be found in the URL of the pen. For example, the `penId` of https://codepen.io/6chinwei/pen/gbYRQmN is `gbYRQmN`.
+
+```javascript
+import { fetchPen } from 'codepen-fetcher';
+
+const penId = 'gbYRQmN';
+const pen = await fetchPen(penId);
+console.log(pen);
+```
+An example output is:
+```javascript
+{
+  access: 'Public',
+  config: {
+    css: 'body {\n  text-align: center;\n}',
+    cssPreProcessor: 'none',
+    head: '',
+    html: '<h1>Hello World</h1>',
+    js: "console.log('Hello World');",
+    jsPreProcessor: 'none'
+  },
+  createdAt: '2024-12-25 10:31:31 UTC',
+  description: { source: { body: 'This is an example pen' } },
+  id: 'gbYRQmN',
+  owner: { id: 'DEnXWE', username: '6chinwei' },
+  tags: [ 'example' ],
+  title: 'Example Pen',
+  updatedAt: '2024-12-25 10:36:12 UTC',
+  url: 'https://codepen.io/6chinwei/pen/gbYRQmN'
+}
+```
+Note that the source code of the pen is stored in the `config` object.
+
+### Fetch a user profile
+Fetch a CodePen user's profile (e.g., ID and Name) by their username.
+
+```javascript
+import { fetchProfile } from 'codepen-fetcher';
+
+const username = '6chinwei';
+const userProfile = await fetchProfile(username);
+console.log(userProfile);
+```
+An example output is:
+```javascript
+{
+  avatar: 'https://assets.codepen.io/1103539/internal/avatars/users/default.png?format=auto&version=1734538260',
+  bio: '',
+  id: 'DEnXWE',
+  location: 'Taiwan',
+  name: '6chinwei',
+  pro: false,
+  username: '6chinwei'
+}
+```
+
+### Fetch pens by user ID
+```javascript
+import { fetchPensByUserId } from 'codepen-fetcher';
+const userId = 'DEnXWE';
+const options = { limit: 5 };
+
+const pens = await fetchPensByUserId(userId, options);
+console.log(pens);
+```
+An example output is:
+```javascript
+[
+  {
+    access: 'Public',
+    config: {
+      css: 'body {\n  text-align: center;\n}',
+      cssPreProcessor: 'none',
+      head: '',
+      html: '<h1>Hello World</h1>',
+      js: "console.log('Hello World');",
+      jsPreProcessor: 'none'
+    },
+    createdAt: '2024-12-25 10:31:31 UTC',
+    description: { source: { body: 'This is an example pen' } },
+    id: 'gbYRQmN',
+    owner: { id: 'DEnXWE', username: '6chinwei' },
+    tags: [ 'example' ],
+    title: 'Example Pen',
+    updatedAt: '2024-12-25 10:36:12 UTC',
+    url: 'https://codepen.io/6chinwei/pen/gbYRQmN'
+  },
+  // ...
+]
+```

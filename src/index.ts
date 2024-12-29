@@ -43,3 +43,5 @@ export async function fetchPensByUserId(userId: string, options?: FetchPensOptio
 
   return await api!.getPensByUserId(userId, options);
 };
+
+export { Pen, FetchPensOptions, UserProfile } from './types';

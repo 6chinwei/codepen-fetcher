@@ -101,3 +101,7 @@ An example output is:
   // ...
 ]
 ```
+
+## Showcase
+**[6chinwei/codepen-repository](https://github.com/6chinwei/codepen-repository)**  
+Automatically download all public pens from [codepen.io/6chinwei](https://codepen.io/6chinwei) and commit the source code to Git repository.  

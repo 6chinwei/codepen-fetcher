@@ -15,7 +15,7 @@ export function mockApiResponse (responseData: GetPenResponse|GetProfileResponse
     json: vi.fn().mockResolvedValue(responseData)
   };
 
-  return vi.spyOn(global, 'fetch')
+  return vi.spyOn(globalThis, 'fetch')
     .mockResolvedValueOnce(mockCsrfResponse as unknown as Response)
     .mockResolvedValueOnce(mockApiResponse as unknown as Response);
 }

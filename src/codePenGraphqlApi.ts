@@ -136,14 +136,17 @@ export default class CodePenGraphqlApi {
     return result.data.pen;
   }
 
-  public async getPensByUserId(userId: string, options?: FetchPensOptions): Promise<Pen[]> {
+  public async getPensByUserId(userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
     const variables = {
       input: {
         filters: {
           userId
         },
         pagination: {
-          limit: options?.limit ?? 10
+          cursor: options?.cursor ?? undefined,
+          limit: options?.limit ?? 10,
+          sortBy: options?.sortBy ?? undefined,
+          sortOrder: options?.sortOrder ?? undefined
         }
       }
     };

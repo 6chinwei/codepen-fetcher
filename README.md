@@ -1,8 +1,8 @@
-# CodePen Fetcher
+# CodePen Fetcher [![Node Current](https://img.shields.io/node/v/codepen-fetcher)](https://www.npmjs.com/package/codepen-fetcher) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/6chinwei/codepen-fetcher/test.yaml?branch=main&label=Test)](https://github.com/6chinwei/codepen-fetcher/actions/workflows/test.yaml)
 
-An unofficial CodePen tool built with TypeScript, capable of fetching basic information of Pens along with their HTML, CSS, and JS source code. It is designed for use in workflow automation tasks.
-  
-This tool uses a workaround approach to retrieve data via the `https://codepen.io/graphql` API.
+An unofficial CodePen Node.js library built with TypeScript, capable of fetching the HTML, CSS, and JS source code of public Pens without authentication. It is designed for use in workflow automation tasks.
+
+This library uses a workaround approach to retrieve data via the `https://codepen.io/graphql` API, which may break if the API changes.
 
 ## Installation
 ```bash

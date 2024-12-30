@@ -26,7 +26,10 @@ export type Pen = {
 };
 
 export type FetchPensOptions = {
-  limit: number | undefined;
+  cursor?: string;
+  limit?: number;
+  sortBy?: 'Id' | 'Popularity' | 'UpdatedAt';
+  sortOrder?: 'Desc' | 'Asc';
 };
 
 export type UserProfile = {

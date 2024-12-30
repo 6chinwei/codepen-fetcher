@@ -36,10 +36,12 @@ export async function fetchProfile(username: string): Promise<UserProfile> {
  * Fetch pens created by a specific user.
  *
  * @param userId
- * @param options Default: `{ limit: 10 }`
+ * @param options
  */
-export async function fetchPensByUserId(userId: string, options?: FetchPensOptions): Promise<Pen[]> {
+export async function fetchPensByUserId(userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
   await initializeApi();
 
   return await api!.getPensByUserId(userId, options);
 };
+
+export { Pen, FetchPensOptions, UserProfile } from './types';

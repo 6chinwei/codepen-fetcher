@@ -1,4 +1,4 @@
-# CodePen Fetcher
+# CodePen Fetcher [![Node Current](https://img.shields.io/node/v/codepen-fetcher)](https://www.npmjs.com/package/codepen-fetcher) [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/6chinwei/codepen-fetcher/test.yaml?branch=main&label=Test)](https://github.com/6chinwei/codepen-fetcher/actions/workflows/test.yaml)
 
 An unofficial CodePen Node.js library built with TypeScript, capable of fetching the HTML, CSS, and JS source code of public Pens without authentication. It is designed for use in workflow automation tasks.
 

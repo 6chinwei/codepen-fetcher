@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mockApiResponse } from './utils';
-import { fetchProfile } from '../src/index';
-import { UserProfile, GetProfileResponse } from '../src/types';
+import { fetchProfile, UserProfile } from '../src/index';
+import { GetProfileResponse } from '../src/types';
 
 describe('fetchProfile', () => {
   beforeEach(() => {

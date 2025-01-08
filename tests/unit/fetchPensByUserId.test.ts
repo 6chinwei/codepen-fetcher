@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mockApiResponse } from './utils';
-import { fetchPensByUserId, Pen, FetchPensOptions } from '../src/index';
-import { GetPensResponse } from '../src/types';
+import { fetchPensByUserId, Pen, FetchPensOptions } from '../../src/index';
+import { GetPensResponse } from '../../src/types';
 
 describe('fetchPensByUserId', () => {
   beforeEach(() => {

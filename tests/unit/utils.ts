@@ -1,5 +1,5 @@
 import { vi } from 'vitest';
-import { GetPenResponse, GetProfileResponse, GetPensResponse } from '../src/types';
+import { GetPenResponse, GetProfileResponse, GetPensResponse } from '../../src/types';
 
 /**
  * Mocks the API response with a pre-request for CSRF.

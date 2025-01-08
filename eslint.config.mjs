@@ -38,7 +38,7 @@ export default tseslint.config(
     }
   },
   {
-    files: ['tests/**'],
-    ...vitest.configs.recommended,
+    files: ['tests/**/*'],
+    ...vitest.configs?.recommended,
   }
 );

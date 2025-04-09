@@ -1,4 +1,4 @@
-import { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse } from './types';
+import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse } from './types';
 import { default as ApiRequestHeaders } from './codePenApiRequestHeaders';
 import { default as QueryBuilder } from './codePenGraphqlQueryBuilder';
 

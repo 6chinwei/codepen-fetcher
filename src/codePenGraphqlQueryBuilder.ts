@@ -1,5 +1,5 @@
+import type { FetchPensOptions } from './types';
 import { query as buildQuery } from 'gql-query-builder';
-import { FetchPensOptions } from './types';
 
 export default class CodePenGraphqlQueryBuilder {
   /**

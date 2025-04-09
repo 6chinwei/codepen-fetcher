@@ -1,5 +1,5 @@
+import type { Pen, FetchPensOptions, UserProfile } from './types';
 import CodePenGraphqlApi from './codePenGraphqlApi';
-import { Pen, FetchPensOptions, UserProfile } from './types';
 
 const api = new CodePenGraphqlApi();
 
@@ -34,4 +34,4 @@ export async function fetchPensByUserId(userId: string, options: FetchPensOption
     .getPensByUserId(userId, options);
 };
 
-export { Pen, FetchPensOptions, UserProfile } from './types';
+export type { Pen, FetchPensOptions, UserProfile } from './types';

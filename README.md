@@ -105,3 +105,32 @@ An example output is:
 ## Showcase
 **[6chinwei/codepen-repository](https://github.com/6chinwei/codepen-repository)**  
 Automatically download all public pens from [codepen.io/6chinwei](https://codepen.io/6chinwei) and commit the source code to Git repository.  
+
+## Development
+1. Clone the repo
+2. Use Node.js v20 or later
+3. Install dependencies
+   ```bash
+   $ npm install  
+   ```
+
+### Unit tests
+To watch for file changes and re-run tests automatically, use
+```bash
+$ npm run test
+```
+
+Run all unit tests once, use
+```bash
+$ npm run test:unit
+```
+
+### Integration tests
+> Test bundle code with real CodePen APIs
+  
+```bash
+# Build the project first
+$ npm run build
+
+$ npm run test:integration
+```

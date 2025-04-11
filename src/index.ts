@@ -1,7 +1,16 @@
+import type { Pen, FetchPensOptions, UserProfile } from './types';
 import CodePenGraphqlApi from './codePenGraphqlApi';
-import { Pen, FetchPensOptions, UserProfile } from './types';
 
-const api = new CodePenGraphqlApi();
+let codePenApi: CodePenGraphqlApi | undefined;
+
+async function makeCodePenApi() {
+  if (!codePenApi) {
+    codePenApi = new CodePenGraphqlApi();
+    await codePenApi.init();
+  }
+
+  return codePenApi;
+}
 
 /**
  * Fetch a pen by its ID, which can be found in the URL of the pen.
@@ -9,7 +18,7 @@ const api = new CodePenGraphqlApi();
  * @param penId
  */
 export async function fetchPen(penId: string): Promise<Pen> {
-  return (await api.init())
+  return (await makeCodePenApi())
     .getPenById(penId);
 };
 
@@ -19,7 +28,7 @@ export async function fetchPen(penId: string): Promise<Pen> {
  * @param username
  */
 export async function fetchProfile(username: string): Promise<UserProfile> {
-  return (await api.init())
+  return (await makeCodePenApi())
     .getProfileByUsername(username);
 }
 
@@ -30,8 +39,8 @@ export async function fetchProfile(username: string): Promise<UserProfile> {
  * @param options
  */
 export async function fetchPensByUserId(userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
-  return (await api.init())
+  return (await makeCodePenApi())
     .getPensByUserId(userId, options);
 };
 
-export { Pen, FetchPensOptions, UserProfile } from './types';
+export type { Pen, FetchPensOptions, UserProfile } from './types';

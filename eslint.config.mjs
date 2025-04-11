@@ -40,5 +40,8 @@ export default tseslint.config(
   {
     files: ['tests/**/*'],
     ...vitest.configs?.recommended,
+    rules: {
+      '@typescript-eslint/unbound-method': 'off',
+    },
   }
 );

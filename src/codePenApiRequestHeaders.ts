@@ -2,9 +2,7 @@
  * Custom Headers for CodePen API requests.
  */
 export default class CodePenApiRequestHeaders extends Headers {
-  private static readonly DEFAULT_INDEX_URL = 'https://codepen.io/';
-
-  private indexUrl: string = CodePenApiRequestHeaders.DEFAULT_INDEX_URL;
+  protected static readonly INDEX_PAGE_URL = 'https://codepen.io/';
 
   constructor() {
     super();
@@ -18,7 +16,7 @@ export default class CodePenApiRequestHeaders extends Headers {
   /**
    * Setup CSRF headers for subsequent API requests.
    *
-   * This method sends a request to the CodePen INDEX_URL
+   * This method sends a request to the CodePen index page
    * to retrieve the CSRF token and cookie.
    */
   public async setupCsrfHeaders (): Promise<void> {
@@ -32,12 +30,6 @@ export default class CodePenApiRequestHeaders extends Headers {
     return;
   }
 
-  public setIndexUrl (indexUrl: string): CodePenApiRequestHeaders {
-    this.indexUrl = indexUrl;
-
-    return this;
-  }
-
   protected async sendRequestToIndex (): Promise<Response> {
     // Headers to open index page
     const headers = {
@@ -45,7 +37,7 @@ export default class CodePenApiRequestHeaders extends Headers {
       'Upgrade-Insecure-Requests': '1',
     };
 
-    return await fetch(this.indexUrl, { headers });
+    return await fetch(CodePenApiRequestHeaders.INDEX_PAGE_URL, { headers });
   }
 
   protected async findCsrfToken (response: Response): Promise<string> {

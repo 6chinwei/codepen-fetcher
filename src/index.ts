@@ -1,11 +1,16 @@
 import type { Pen, FetchPensOptions, UserProfile } from './types';
 import CodePenGraphqlApi from './codePenGraphqlApi';
+import ApiRequestHeaders from './codePenApiRequestHeaders';
+import QueryBuilder from './codePenGraphqlQueryBuilder';
 
 let codePenApi: CodePenGraphqlApi | undefined;
 
 async function makeCodePenApi() {
   if (!codePenApi) {
-    codePenApi = new CodePenGraphqlApi();
+    const apiRequestHeaders = new ApiRequestHeaders();
+    const queryBuilder = new QueryBuilder();
+
+    codePenApi = new CodePenGraphqlApi(apiRequestHeaders, queryBuilder);
     await codePenApi.init();
   }
 

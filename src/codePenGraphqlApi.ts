@@ -1,18 +1,19 @@
 import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse } from './types';
-import { default as ApiRequestHeaders } from './codePenApiRequestHeaders';
-import { default as QueryBuilder } from './codePenGraphqlQueryBuilder';
+import ApiRequestHeaders from './codePenApiRequestHeaders';
+import QueryBuilder from './codePenGraphqlQueryBuilder';
 
 export default class CodePenGraphqlApi {
-  protected static readonly DEFAULT_API_URL = 'https://codepen.io/graphql';
+  protected static readonly API_URL = 'https://codepen.io/graphql';
 
   protected apiRequestHeaders: ApiRequestHeaders;
   protected apiQueryBuilder: QueryBuilder;
-  protected apiUrl: string;
 
-  constructor (config: { apiUrl?: string } = {}) {
-    this.apiRequestHeaders = new ApiRequestHeaders();
-    this.apiQueryBuilder = new QueryBuilder();
-    this.apiUrl = config.apiUrl ?? CodePenGraphqlApi.DEFAULT_API_URL;
+  constructor (
+    apiRequestHeaders: ApiRequestHeaders,
+    apiQueryBuilder: QueryBuilder
+  ) {
+    this.apiRequestHeaders = apiRequestHeaders;
+    this.apiQueryBuilder = apiQueryBuilder;
   }
 
   public async init(): Promise<CodePenGraphqlApi> {
@@ -38,7 +39,7 @@ export default class CodePenGraphqlApi {
     };
 
     try {
-      const response = await fetch(this.apiUrl, options);
+      const response = await fetch(CodePenGraphqlApi.API_URL, options);
       const data = await response.json() as T;
 
       return data;
@@ -56,17 +57,17 @@ export default class CodePenGraphqlApi {
     return result.data.pen;
   }
 
-  public async getPensByUserId (userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
-    const query = this.apiQueryBuilder.buildGetPensByUserIdQuery(userId, options);
-    const result = await this.executeGraphqlQuery<GetPensResponse>(query);
-
-    return result.data.pens.pens;
-  }
-
   public async getProfileByUsername (username: string): Promise<UserProfile> {
     const query = this.apiQueryBuilder.buildGetProfileByUsernameQuery(username);
     const result = await this.executeGraphqlQuery<GetProfileResponse>(query);
 
     return result.data.ownerByUsername;
+  }
+
+  public async getPensByUserId (userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
+    const query = this.apiQueryBuilder.buildGetPensByUserIdQuery(userId, options);
+    const result = await this.executeGraphqlQuery<GetPensResponse>(query);
+
+    return result.data.pens.pens;
   }
 }

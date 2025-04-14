@@ -4,17 +4,26 @@ import ApiRequestHeaders from './codePenApiRequestHeaders';
 import QueryBuilder from './codePenGraphqlQueryBuilder';
 
 let codePenApi: CodePenGraphqlApi | undefined;
+let initPromise: Promise<CodePenGraphqlApi> | undefined;
 
-async function makeCodePenApi() {
-  if (!codePenApi) {
-    const apiRequestHeaders = new ApiRequestHeaders();
-    const queryBuilder = new QueryBuilder();
-
-    codePenApi = new CodePenGraphqlApi(apiRequestHeaders, queryBuilder);
-    await codePenApi.init();
+async function makeCodePenApiInstance() {
+  if (codePenApi) {
+    return codePenApi;
   }
 
-  return codePenApi;
+  if (!initPromise) {
+    // Prevent duplicate initialization by using the same Promise
+    initPromise = (async () => {
+      const apiRequestHeaders = new ApiRequestHeaders();
+      const queryBuilder = new QueryBuilder();
+
+      codePenApi = await (new CodePenGraphqlApi(apiRequestHeaders, queryBuilder)).init();
+
+      return codePenApi;
+    })();
+  }
+
+  return initPromise;
 }
 
 /**
@@ -23,9 +32,9 @@ async function makeCodePenApi() {
  * @param penId
  */
 export async function fetchPen(penId: string): Promise<Pen> {
-  return (await makeCodePenApi())
+  return (await makeCodePenApiInstance())
     .getPenById(penId);
-};
+}
 
 /**
  * Fetch a user profile by username.
@@ -33,7 +42,7 @@ export async function fetchPen(penId: string): Promise<Pen> {
  * @param username
  */
 export async function fetchProfile(username: string): Promise<UserProfile> {
-  return (await makeCodePenApi())
+  return (await makeCodePenApiInstance())
     .getProfileByUsername(username);
 }
 
@@ -44,8 +53,8 @@ export async function fetchProfile(username: string): Promise<UserProfile> {
  * @param options
  */
 export async function fetchPensByUserId(userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
-  return (await makeCodePenApi())
+  return (await makeCodePenApiInstance())
     .getPensByUserId(userId, options);
-};
+}
 
 export type { Pen, FetchPensOptions, UserProfile } from './types';

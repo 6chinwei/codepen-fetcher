@@ -45,7 +45,7 @@ export default class CodePenApiRequestHeaders extends Headers {
     const [, token] = (/<meta name="csrf-token"\s+content="([^"]+)"/.exec(html)) ?? [];
 
     if (!token) {
-      throw new Error('CSRF token not found');
+      throw new Error('CSRF token not found in HTML: ' + html);
     }
 
     return token;
@@ -57,7 +57,7 @@ export default class CodePenApiRequestHeaders extends Headers {
     const cookie = cookieHeader.find(cookie => cookie.startsWith(`${cookieName}=`))?.split(';')[0];
 
     if (!cookie) {
-      throw new Error('CSRF cookie not found');
+      throw new Error('CSRF cookie not found in `set-cookie` headers: ' + cookieHeader.join(', '));
     }
 
     return cookie;

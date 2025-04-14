@@ -26,6 +26,7 @@ describe('CodePen Fetcher', () => {
     const penId = '12345';
     const pen = { id: penId, title: 'Test Pen' } as Pen;
 
+    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
     mockCodePenGraphqlApi.getPenById.mockResolvedValue(pen);
 
     const { fetchPen } = await import('../../src/');
@@ -40,6 +41,7 @@ describe('CodePen Fetcher', () => {
     const username = 'testuser';
     const profile = { username, name: 'Test User' } as UserProfile;
 
+    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
     mockCodePenGraphqlApi.getProfileByUsername.mockResolvedValue(profile);
 
     const { fetchProfile } = await import('../../src/');
@@ -58,6 +60,7 @@ describe('CodePen Fetcher', () => {
       { id: 'pen2', title: 'Pen 2' },
     ] as Pen[];
 
+    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
     mockCodePenGraphqlApi.getPensByUserId.mockResolvedValue(pens);
 
     const { fetchPensByUserId } = await import('../../src/');
@@ -72,6 +75,7 @@ describe('CodePen Fetcher', () => {
     const penId = '12345';
     const pen = { id: penId, title: 'Test Pen' } as Pen;
 
+    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
     mockCodePenGraphqlApi.getPenById.mockResolvedValue(pen);
 
     const { fetchPen } = await import('../../src/');

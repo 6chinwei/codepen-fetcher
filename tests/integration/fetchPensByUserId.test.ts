@@ -11,4 +11,12 @@ describe('fetchPensByUserId', () => {
 
     expect(pens.length).toEqual(5);
   });
+
+  it('should return pens of 6chinwei with default options', { retry: 2 }, async () => {
+    const userId = 'DEnXWE'; // ID of @6chinwei
+
+    const pens: Pen[] = await fetchPensByUserId(userId);
+
+    expect(pens.length).toEqual(10);
+  });
 });

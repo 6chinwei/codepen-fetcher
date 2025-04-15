@@ -3,7 +3,7 @@ import { fetchPen, Pen } from '../../dist/index';
 
 describe('fetchPen', () => {
 
-  it('should fetch pen by ID: JoPRMeB', async () => {
+  it('should fetch pen by ID: JoPRMeB', { retry: 2 }, async () => {
     const penId = 'JoPRMeB'; // ID of an example pen
 
     const pen: Pen = await fetchPen(penId);

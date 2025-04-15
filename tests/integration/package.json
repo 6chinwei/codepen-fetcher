@@ -1,0 +1,7 @@
+{
+  "name": "codepen-fetcher-integration-tests",
+  "type": "module",
+  "dependencies": {
+    "codepen-fetcher": "file:../../"
+  }
+}

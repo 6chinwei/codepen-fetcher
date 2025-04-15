@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fetchProfile, UserProfile } from '../../dist/index';
+import { fetchProfile, UserProfile } from 'codepen-fetcher';
 
 describe('fetchProfile', () => {
 

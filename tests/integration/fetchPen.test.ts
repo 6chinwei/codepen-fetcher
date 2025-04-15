@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { fetchPen, Pen } from '../../dist/index';
+import { fetchPen, Pen } from 'codepen-fetcher';
 
 describe('fetchPen', () => {
 

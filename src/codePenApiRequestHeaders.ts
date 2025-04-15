@@ -33,8 +33,12 @@ export default class CodePenApiRequestHeaders extends Headers {
   protected async sendRequestToIndex (): Promise<Response> {
     // Headers to open index page
     const headers = {
-      'Accept': 'text/html',
+      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'Accept-Language': 'en-US,en;q=0.5',
+      'Accept-Encoding': 'gzip, deflate, br',
+      'Connection': 'keep-alive',
       'Upgrade-Insecure-Requests': '1',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Gecko/20100101 Firefox/112.0',
     };
 
     return await fetch(CodePenApiRequestHeaders.INDEX_PAGE_URL, { headers });
@@ -45,7 +49,7 @@ export default class CodePenApiRequestHeaders extends Headers {
     const [, token] = (/<meta name="csrf-token"\s+content="([^"]+)"/.exec(html)) ?? [];
 
     if (!token) {
-      throw new Error('CSRF token not found');
+      throw new Error('CSRF token not found in HTML: ' + html);
     }
 
     return token;
@@ -57,7 +61,7 @@ export default class CodePenApiRequestHeaders extends Headers {
     const cookie = cookieHeader.find(cookie => cookie.startsWith(`${cookieName}=`))?.split(';')[0];
 
     if (!cookie) {
-      throw new Error('CSRF cookie not found');
+      throw new Error('CSRF cookie not found in `set-cookie` headers: ' + cookieHeader.join(', '));
     }
 
     return cookie;

@@ -136,5 +136,9 @@ $ npm run test:unit
 # Build the project first
 $ npm run build
 
+# Install local dependencies for integration tests
+$ npm install --prefix tests/integration
+
+# Run integration tests
 $ npm run test:integration
 ```

@@ -1,4 +1,4 @@
-name: Test
+name: Unit Test
 
 on:
   push:
@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: '20.x'
       - run: npm install
-      - run: npm run build # Build to lint the code for integration tests
       - run: npm run lint
       - run: |
           npm run test:unit -- \

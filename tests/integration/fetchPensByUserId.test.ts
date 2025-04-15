@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { fetchPensByUserId, Pen } from '../../dist/index';
+import { fetchPensByUserId, Pen } from 'codepen-fetcher';
 
 describe('fetchPensByUserId', () => {
 
-  it('should return pens of 6chinwei', async () => {
+  it('should return pens of 6chinwei', { retry: 2 }, async () => {
     const userId = 'DEnXWE'; // ID of @6chinwei
     const options = { limit: 5 };
 

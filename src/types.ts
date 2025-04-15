@@ -66,3 +66,15 @@ export type GetPensResponse = {
     }
   };
 };
+
+export type GraphqlVariable = {
+  value: unknown;
+  type: string;
+  required?: boolean; // Defaults `true`
+};
+
+export type GraphqlQueryOptions = {
+  operation: string;
+  fields: Array<string | object>;
+  variables?: Record<string, GraphqlVariable>;
+};

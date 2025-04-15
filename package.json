@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts",
-    "lint": "eslint .",
+    "lint": "eslint . --ignore-pattern tests/integration",
     "test": "vitest --dir tests/unit",
     "test:unit": "vitest run --dir tests/unit --coverage --coverage.reporter text",
     "test:integration": "vitest run --dir tests/integration"

@@ -1,185 +1,142 @@
-import type { FetchPensOptions, GraphqlVariable, GraphqlQueryOptions } from './types';
-
-const CodePenGraphqlTypes = {
-  Id: 'ID',
-  String: 'String',
-  OwnerEnum: 'OwnerEnum',
-  User: 'User',
-  PensInput: 'PensInput',
-} as const;
+import type { FetchPensOptions, GraphqlFields } from './types';
 
 export default class CodePenGraphqlQueryBuilder {
-  protected static readonly PEN_FIELDS: Array<string | object> = [
-    'access',
-    {
-      'config': [
-        'css',
-        'cssPreProcessor',
-        'head',
-        'html',
-        'js',
-        'jsPreProcessor'
-      ]
-    },
-    'createdAt',
-    { 'description': [{ 'source' : ['body'] }] },
-    'id',
-    { 'owner': ['id', 'username'] },
-    'tags',
-    'title',
-    'updatedAt',
-    'url',
-  ];
+  public static readonly DEFAULT_FETCH_LIMIT = 10;
+  public static readonly CODEPEN_OBJECT_TYPES = {
+    USER: 'User',
+  };
 
-  protected static readonly USER_PROFILE_FIELDS: Array<string | object> = [
-    'avatar',
-    'bio',
-    {
-      'counts': ['followers', 'following', 'pens']
+  protected static readonly PEN_FIELDS: GraphqlFields = {
+    access: true,
+    config: {
+      css: true,
+      cssPreProcessor: true,
+      head: true,
+      html: true,
+      js: true,
+      jsPreProcessor: true,
     },
-    'id',
-    'location',
-    'name',
-    'pro',
-    'username',
-  ];
+    createdAt: true,
+    description: {
+      source: {
+        body: true,
+      },
+    },
+    id: true,
+    owner: {
+      id: true,
+      username: true,
+    },
+    tags: true,
+    title: true,
+    updatedAt: true,
+    url: true,
+  };
 
-  public buildGetPenByIdQuery (penId: string): string {
+  protected static readonly USER_PROFILE_FIELDS: GraphqlFields = {
+    avatar: true,
+    bio: true,
+    counts: {
+      followers: true,
+      following: true,
+      pens: true,
+    },
+    id: true,
+    location: true,
+    name: true,
+    pro: true,
+    username: true,
+  };
+
+  public buildGetPenByIdQuery(penId: string): string {
     return this.buildQuery({
       operation: 'pen',
-      fields: CodePenGraphqlQueryBuilder.PEN_FIELDS,
-      variables: {
-        id: {
-          value: penId,
-          type: CodePenGraphqlTypes.Id
-        }
-      }
+      args: `(id: "${penId}")`,
+      fields: CodePenGraphqlQueryBuilder.PEN_FIELDS
     });
   }
 
-  public buildGetPensByUserIdQuery (userId: string, options: FetchPensOptions = { limit: 10 }): string {
+  public buildGetPensByUserIdQuery(userId: string, options?: FetchPensOptions): string {
+    const args = `(input: { filters: { userId: "${userId}" }, pagination: { ${this.buildPaginationArgs(options)} } })`;
+
     return this.buildQuery({
       operation: 'pens',
-      fields: [{
-        pens: CodePenGraphqlQueryBuilder.PEN_FIELDS
-      }],
-      variables: {
-        input: {
-          value: {
-            filters: {
-              userId
-            },
-            pagination: options
-          },
-          type: CodePenGraphqlTypes.PensInput
-        }
-      }
+      args,
+      fields: { pens: CodePenGraphqlQueryBuilder.PEN_FIELDS }
     });
   }
 
-  public buildGetProfileByUsernameQuery (username: string): string {
+  protected buildPaginationArgs(options?: FetchPensOptions): string {
+    const {
+      cursor,
+      limit = CodePenGraphqlQueryBuilder.DEFAULT_FETCH_LIMIT,
+      sortBy,
+      sortOrder
+    } = options ?? {};
+
+    const args: string[] = [];
+
+    if (cursor) {
+      args.push(this.formatArg('cursor', cursor, true)); // Need to be quoted
+    }
+
+    args.push(this.formatArg('limit', limit));
+
+    if (sortBy) {
+      args.push(this.formatArg('sortBy', sortBy));
+    }
+
+    if (sortOrder) {
+      args.push(this.formatArg('sortOrder', sortOrder));
+    }
+
+    return args.join(', ');
+  }
+
+  protected formatArg(key: string, value: string | number, quoted: boolean = false): string {
+    return quoted ? `${key}: "${value}"` : `${key}: ${value}`;
+  }
+
+  public buildGetProfileByUsernameQuery(username: string): string {
     return this.buildQuery({
       operation: 'ownerByUsername',
-      fields: CodePenGraphqlQueryBuilder.USER_PROFILE_FIELDS,
-      variables: {
-        ownerUsername: {
-          value: username,
-          type: CodePenGraphqlTypes.String
-        },
-        ownerType: {
-          value: CodePenGraphqlTypes.User,
-          type: CodePenGraphqlTypes.OwnerEnum
-        }
-      }
+      args: `(ownerUsername: "${username}", ownerType: ${CodePenGraphqlQueryBuilder.CODEPEN_OBJECT_TYPES.USER})`,
+      fields: CodePenGraphqlQueryBuilder.USER_PROFILE_FIELDS
     });
   }
 
   /**
-   * Return a GraphQL query string with variables.
+   * Return a inline GraphQL query string
    *
-   * @param operation - The name of the root GraphQL operation to query.
-   * @param fields - The fields to retrieve from the operation.
-   * @param variables - Optional GraphQL variables used in the query.
+   * @param operation - The GraphQL operation name (e.g. "pen", "pens", "ownerByUsername").
+   * @param args - The argument string to include in the query (e.g. `(id: "123")`).
+   * @param fields - An object representing fields.
    *
-   * @returns A stringified JSON object containing the GraphQL query and variables.
-   *
-   * @example
-   * buildQuery({
-   *     operation: 'pen',
-   *     fields: ['id', 'title'],
-   *     variables: {
-   *         id: { value: '123', type: CodePenGraphqlTypes.ID }
-   *     }
-   * });
+   * @returns A JSON stringified inline GraphQL query.
    */
   protected buildQuery({
     operation,
-    fields,
-    variables
-  }: GraphqlQueryOptions): string {
-    const variableDefinitions = this.buildVariableDefinitions(variables);
-    const variableAssignments = this.buildVariableAssignments(variables);
-
-    const query = `
-      query ${variableDefinitions} {
-        ${operation} ${variableAssignments} {
-          ${this.buildFields(fields)}
-        }
-      }
-    `;
-
-    const variableValues = variables
-      ? Object.entries(variables).reduce((acc, [key, val]) => {
-        acc[key] = val.value;
-
-        return acc;
-      }, {} as Record<string, unknown>)
-      : undefined;
-
+    args,
+    fields
+  }: {
+    operation: string;
+    args: string;
+    fields: GraphqlFields;
+  }): string {
     return JSON.stringify({
-      query: query.replace(/\s+/g, ' ').trim(),
-      variables: variableValues
+      query: `query { ${operation} ${args} { ${this.buildFields(fields)} }}`
     });
   }
 
-  protected buildVariableDefinitions(variables?: Record<string, GraphqlVariable>): string {
-    if (!variables || Object.keys(variables).length === 0) {
-      return '';
-    }
-
-    const defs = Object.entries(variables)
-      .map(([key, { type, required = true }]) => `$${key}: ${type}${required ? '!' : ''}`)
-      .join(', ');
-
-    return `(${defs})`;
-  }
-
-  protected buildVariableAssignments(variables?: Record<string, GraphqlVariable>): string {
-    if (!variables || Object.keys(variables).length === 0) {
-      return '';
-    }
-
-    const assigns = Object.keys(variables)
-      .map(key => `${key}: $${key}`)
-      .join(', ');
-
-    return `(${assigns})`;
-  }
-
-  protected buildFields(fields: Array<string | object>): string {
-    return fields
-      .map(field => {
-        if (typeof field === 'string') {
-          return field;
-        }
-        if (typeof field === 'object') {
-          return Object.entries(field)
-            .map(([key, value]) => `${key} { ${this.buildFields(value as Array<string | object>)} }`)
-            .join('\n');
+  protected buildFields(fields: GraphqlFields): string {
+    return Object.entries(fields)
+      .map(([key, value]) => {
+        if (value === true) {
+          return key;
         }
 
-        return '';
+        return `${key} { ${this.buildFields(value as GraphqlFields)} }`;
       })
-      .join('\n');
+      .join(' ');
   }
 }

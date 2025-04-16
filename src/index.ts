@@ -52,7 +52,7 @@ export async function fetchProfile(username: string): Promise<UserProfile> {
  * @param userId
  * @param options
  */
-export async function fetchPensByUserId(userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
+export async function fetchPensByUserId(userId: string, options?: FetchPensOptions): Promise<Pen[]> {
   return (await makeCodePenApiInstance())
     .getPensByUserId(userId, options);
 }

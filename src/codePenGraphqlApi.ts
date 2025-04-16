@@ -64,7 +64,7 @@ export default class CodePenGraphqlApi {
     return result.data.ownerByUsername;
   }
 
-  public async getPensByUserId (userId: string, options: FetchPensOptions = {}): Promise<Pen[]> {
+  public async getPensByUserId (userId: string, options?: FetchPensOptions): Promise<Pen[]> {
     const query = this.apiQueryBuilder.buildGetPensByUserIdQuery(userId, options);
     const result = await this.executeGraphqlQuery<GetPensResponse>(query);
 

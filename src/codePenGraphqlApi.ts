@@ -1,4 +1,4 @@
-import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse } from './types';
+import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse, GraphqlPayload } from './types';
 import ApiRequestHeaders from './codePenApiRequestHeaders';
 import QueryBuilder from './codePenGraphqlQueryBuilder';
 
@@ -26,15 +26,15 @@ export default class CodePenGraphqlApi {
    * Executes a GraphQL query with the provided query.
    *
    * @template T - The expected return type of the GraphQL query.
-   * @param query - The GraphQL query.
+   * @param payload - The GraphQL query payload.
    * @returns A promise that resolves to the result.
    * @throws Throws an error if the fetch operation fails.
    */
-  protected async executeGraphqlQuery<T> (query: string): Promise<T> {
+  protected async executeGraphqlQuery<T> (payload: GraphqlPayload): Promise<T> {
     const options: RequestInit = {
       method: 'POST',
       headers: this.apiRequestHeaders,
-      body: query,
+      body: JSON.stringify(payload),
       redirect: 'follow'
     };
 
@@ -51,22 +51,28 @@ export default class CodePenGraphqlApi {
   }
 
   public async getPenById (penId: string): Promise<Pen> {
-    const query = this.apiQueryBuilder.buildGetPenByIdQuery(penId);
-    const result = await this.executeGraphqlQuery<GetPenResponse>(query);
+    const payload = {
+      query: this.apiQueryBuilder.buildGetPenByIdQuery(penId)
+    };
+    const result = await this.executeGraphqlQuery<GetPenResponse>(payload);
 
     return result.data.pen;
   }
 
   public async getProfileByUsername (username: string): Promise<UserProfile> {
-    const query = this.apiQueryBuilder.buildGetProfileByUsernameQuery(username);
-    const result = await this.executeGraphqlQuery<GetProfileResponse>(query);
+    const payload = {
+      query: this.apiQueryBuilder.buildGetProfileByUsernameQuery(username)
+    };
+    const result = await this.executeGraphqlQuery<GetProfileResponse>(payload);
 
     return result.data.ownerByUsername;
   }
 
   public async getPensByUserId (userId: string, options?: FetchPensOptions): Promise<Pen[]> {
-    const query = this.apiQueryBuilder.buildGetPensByUserIdQuery(userId, options);
-    const result = await this.executeGraphqlQuery<GetPensResponse>(query);
+    const payload = {
+      query: this.apiQueryBuilder.buildGetPensByUserIdQuery(userId, options)
+    };
+    const result = await this.executeGraphqlQuery<GetPensResponse>(payload);
 
     return result.data.pens.pens;
   }

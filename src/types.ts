@@ -66,3 +66,21 @@ export type GetPensResponse = {
     }
   };
 };
+
+export type GraphqlPayload = {
+  query: string;
+};
+
+export type GraphqlFields = Record<string, boolean | object>;
+
+/**
+ * The type of the parameters used to build a GraphQL query
+ */
+export type BuildQueryParams = {
+  /** The GraphQL operation name (e.g. `pen`) */
+  operation: string;
+  /** The argument string to include in the query (e.g. `(id: "123")`) */
+  args: string;
+  /** The fields to include in the query */
+  fields: GraphqlFields;
+};

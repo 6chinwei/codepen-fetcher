@@ -1,8 +1,8 @@
-import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse, GraphqlPayload } from './types';
+import type { CodePenApi, Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse, GraphqlPayload } from './types';
 import ApiRequestHeaders from './codePenApiRequestHeaders';
 import QueryBuilder from './codePenGraphqlQueryBuilder';
 
-export default class CodePenGraphqlApi {
+export default class CodePenGraphqlApi implements CodePenApi {
   protected static readonly API_URL = 'https://codepen.io/graphql';
 
   protected apiRequestHeaders: ApiRequestHeaders;

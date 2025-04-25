@@ -1,4 +1,4 @@
-import type { FetchPensOptions } from '../../src/types';
+import { type FetchPensOptions, SortBy, SortOrder } from '../../src/types';
 import { describe, it, expect } from 'vitest';
 import CodePenGraphqlQueryBuilder from '../../src/codePenGraphqlQueryBuilder';
 
@@ -19,7 +19,7 @@ describe('CodePenGraphqlQueryBuilder', () => {
   describe('buildGetPensByUserIdQuery with options', () => {
     it('should build a query for getting pens by user ID', () => {
       const userId = 'user123';
-      const options: FetchPensOptions = { cursor: 'abc', limit: 5, sortBy: 'Id', sortOrder: 'Desc' };
+      const options: FetchPensOptions = { cursor: 'abc', limit: 5, sortBy: SortBy.ID, sortOrder: SortOrder.DESC };
       const query = queryBuilder.buildGetPensByUserIdQuery(userId, options);
 
       expect(query).toContain(`query { pens (input: { filters: { userId: "${userId}" }`);

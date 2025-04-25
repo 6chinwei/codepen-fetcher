@@ -25,11 +25,22 @@ export type Pen = {
   url: string;
 };
 
+export enum SortBy {
+  ID = 'Id',
+  POPULARITY = 'Popularity',
+  UPDATED_AT = 'UpdatedAt',
+}
+
+export enum SortOrder {
+  DESC = 'Desc',
+  ASC = 'Asc',
+}
+
 export type FetchPensOptions = {
   cursor?: string;
   limit?: number;
-  sortBy?: 'Id' | 'Popularity' | 'UpdatedAt';
-  sortOrder?: 'Desc' | 'Asc';
+  sortBy?: SortBy;
+  sortOrder?: SortOrder;
 };
 
 export type UserProfile = {

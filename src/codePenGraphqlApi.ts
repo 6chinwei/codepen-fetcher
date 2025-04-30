@@ -40,13 +40,24 @@ export default class CodePenGraphqlApi implements CodePenApi {
 
     try {
       const response = await fetch(CodePenGraphqlApi.API_URL, options);
+
+      if (!response.ok) {
+        throw new Error(
+          `response status: ${response.status} ${response.statusText}`
+        );
+      }
+
       const data = await response.json() as T;
 
       return data;
     } catch (error) {
       console.error('Fetch error:', error);
 
-      throw new Error('Failed to fetch data');
+      throw new Error(
+        `Failed to execute GraphQL query: ${payload.query}. Error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
     }
   }
 

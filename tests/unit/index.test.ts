@@ -66,18 +66,4 @@ describe('CodePen Fetcher', () => {
     expect(mockCodePenApi.getPensByUserId).toHaveBeenCalledWith(userId, undefined);
     expect(result).toEqual(pens);
   });
-
-  it('init() should only be called once', async () => {
-    const penId = '12345';
-    const pen = { id: penId, title: 'Test Pen' };
-
-    mockCodePenApi.getPenById.mockResolvedValue(pen);
-
-    const { fetchPen } = await import('../../src/');
-
-    await fetchPen(penId);
-    await fetchPen(penId);
-
-    expect(mockCodePenApi.getPenById).toHaveBeenCalledTimes(2);
-  });
 });

@@ -1,20 +1,20 @@
-import type { FetchPensOptions, Pen, UserProfile } from '../../src/types';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { CodePenApi } from '../../src/types';
 
-const mockCodePenGraphqlApi = {
-  init: vi.fn(),
-  getPenById: vi.fn(),
-  getProfileByUsername: vi.fn(),
-  getPensByUserId: vi.fn()
+// Allow MockCodePenApi to inherit all structure of CodePenApi
+type MockCodePenApi = {
+  [K in keyof CodePenApi]: ReturnType<typeof vi.fn> & CodePenApi[K];
 };
 
-vi.mock('../../src/codePenGraphqlApi', () => {
-  return {
-    default: vi.fn().mockImplementation(() => mockCodePenGraphqlApi),
-  };
-});
-vi.mock('../../src/codePenApiRequestHeaders', () => ({ default: vi.fn()}));
-vi.mock('../../src/codePenGraphqlQueryBuilder', () => ({ default: vi.fn()}));
+const mockCodePenApi: MockCodePenApi = {
+  getPenById: vi.fn(),
+  getProfileByUsername: vi.fn(),
+  getPensByUserId: vi.fn(),
+};
+
+vi.mock('../../src/codePenApiInitializer', () => ({
+  makeCodePenApiInstance: vi.fn(() => Promise.resolve(mockCodePenApi)),
+}));
 
 describe('CodePen Fetcher', () => {
   beforeEach(() => {
@@ -24,67 +24,46 @@ describe('CodePen Fetcher', () => {
 
   it('fetchPen() should fetch a pen by its ID', async () => {
     const penId = '12345';
-    const pen = { id: penId, title: 'Test Pen' } as Pen;
+    const pen = { id: penId, title: 'Test Pen' };
 
-    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
-    mockCodePenGraphqlApi.getPenById.mockResolvedValue(pen);
+    mockCodePenApi.getPenById.mockResolvedValue(pen);
 
     const { fetchPen } = await import('../../src/');
+
     const result = await fetchPen(penId);
 
-    expect(mockCodePenGraphqlApi.init).toHaveBeenCalled();
-    expect(mockCodePenGraphqlApi.getPenById).toHaveBeenCalledWith(penId);
+    expect(mockCodePenApi.getPenById).toHaveBeenCalledWith(penId);
     expect(result).toEqual(pen);
   });
 
   it('fetchProfile() should fetch a user profile by username', async () => {
     const username = 'testuser';
-    const profile = { username, name: 'Test User' } as UserProfile;
+    const profile = { username, name: 'Test User' };
 
-    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
-    mockCodePenGraphqlApi.getProfileByUsername.mockResolvedValue(profile);
+    mockCodePenApi.getProfileByUsername.mockResolvedValue(profile);
 
     const { fetchProfile } = await import('../../src/');
+
     const result = await fetchProfile(username);
 
-    expect(mockCodePenGraphqlApi.init).toHaveBeenCalled();
-    expect(mockCodePenGraphqlApi.getProfileByUsername).toHaveBeenCalledWith(username);
+    expect(mockCodePenApi.getProfileByUsername).toHaveBeenCalledWith(username);
     expect(result).toEqual(profile);
   });
 
   it('fetchPensByUserId() should fetch pens by a user id', async () => {
     const userId = 'user123';
-    const options = { limit: 10, a: 1 } as FetchPensOptions;
     const pens = [
       { id: 'pen1', title: 'Pen 1' },
       { id: 'pen2', title: 'Pen 2' },
-    ] as Pen[];
+    ];
 
-    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
-    mockCodePenGraphqlApi.getPensByUserId.mockResolvedValue(pens);
+    mockCodePenApi.getPensByUserId.mockResolvedValue(pens);
 
     const { fetchPensByUserId } = await import('../../src/');
-    const result = await fetchPensByUserId(userId, options);
 
-    expect(mockCodePenGraphqlApi.init).toHaveBeenCalled();
-    expect(mockCodePenGraphqlApi.getPensByUserId).toHaveBeenCalledWith(userId, options);
+    const result = await fetchPensByUserId(userId);
+
+    expect(mockCodePenApi.getPensByUserId).toHaveBeenCalledWith(userId, undefined);
     expect(result).toEqual(pens);
-  });
-
-  it('init() should only be called once', async () => {
-    const penId = '12345';
-    const pen = { id: penId, title: 'Test Pen' } as Pen;
-
-    mockCodePenGraphqlApi.init.mockResolvedValue(mockCodePenGraphqlApi);
-    mockCodePenGraphqlApi.getPenById.mockResolvedValue(pen);
-
-    const { fetchPen } = await import('../../src/');
-
-    await fetchPen(penId);
-    await fetchPen(penId);
-    await fetchPen(penId);
-
-    expect(mockCodePenGraphqlApi.init).toHaveBeenCalledTimes(1);
-    expect(mockCodePenGraphqlApi.getPenById).toHaveBeenCalledTimes(3);
   });
 });

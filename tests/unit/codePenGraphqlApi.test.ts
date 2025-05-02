@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import CodePenGraphqlApi from '../../src/codePenGraphqlApi';
 import ApiRequestHeaders from '../../src/codePenApiRequestHeaders';
 import QueryBuilder from '../../src/codePenGraphqlQueryBuilder';
-import { mockFetchJson } from './utils';
+import { mockFetchJson, mockFetchError } from './utils';
 
 describe('CodePenGraphqlApi', () => {
   let api: CodePenGraphqlApi;
@@ -95,5 +95,13 @@ describe('CodePenGraphqlApi', () => {
 
     expect(mockQueryBuilder.buildGetPensByUserIdQuery).toHaveBeenCalledWith(userId, options);
     expect(result).toEqual(pens);
+  });
+
+  it('should throw an error', async () => {
+    const mockStatusCode = 404;
+
+    mockFetchError(mockStatusCode, 'Not Found');
+
+    await expect(() => api.getPenById('abc123')).rejects.toThrowError(`${mockStatusCode}`);
   });
 });

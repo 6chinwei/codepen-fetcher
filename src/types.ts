@@ -1,3 +1,9 @@
+export interface CodePenApi {
+  getPenById(penId: string): Promise<Pen>;
+  getProfileByUsername(username: string): Promise<UserProfile>;
+  getPensByUserId(userId: string, options?: FetchPensOptions): Promise<Pen[]>;
+}
+
 export type Pen = {
   access: string;
   config: {

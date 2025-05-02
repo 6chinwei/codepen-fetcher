@@ -1,8 +1,8 @@
-import type  { Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse, GraphqlPayload } from './types';
+import type { CodePenApi, Pen, FetchPensOptions, UserProfile, GetPenResponse, GetProfileResponse, GetPensResponse, GraphqlPayload } from './types';
 import ApiRequestHeaders from './codePenApiRequestHeaders';
 import QueryBuilder from './codePenGraphqlQueryBuilder';
 
-export default class CodePenGraphqlApi {
+export default class CodePenGraphqlApi implements CodePenApi {
   protected static readonly API_URL = 'https://codepen.io/graphql';
 
   protected apiRequestHeaders: ApiRequestHeaders;
@@ -40,13 +40,24 @@ export default class CodePenGraphqlApi {
 
     try {
       const response = await fetch(CodePenGraphqlApi.API_URL, options);
+
+      if (!response.ok) {
+        throw new Error(
+          `response status: ${response.status} ${response.statusText}`
+        );
+      }
+
       const data = await response.json() as T;
 
       return data;
     } catch (error) {
       console.error('Fetch error:', error);
 
-      throw new Error('Failed to fetch data');
+      throw new Error(
+        `Failed to execute GraphQL query: ${payload.query}. Error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
     }
   }
 

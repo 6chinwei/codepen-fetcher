@@ -112,7 +112,7 @@ Automatically download all public pens from [codepen.io/6chinwei](https://codepe
 
 ## Development
 1. Clone the repo
-2. Use Node.js v20 or later
+2. Use Node.js v24 or later. (Recommended to use [Volta](https://volta.sh/))
 3. Install dependencies
    ```bash
    $ npm install  

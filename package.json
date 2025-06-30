@@ -12,7 +12,7 @@
     "test:integration": "vitest run --dir tests/integration"
   },
   "engines": {
-    "node": ">20.0.0"
+    "node": ">=18"
   },
   "files": [
     "dist",

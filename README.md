@@ -142,3 +142,7 @@ $ npm install --prefix tests/integration
 # Run integration tests
 $ npm run test:integration
 ```
+
+### Node.js compatibility tests
+See [6chinwei/codepen-fetcher-compatibility-test](https://github.com/6chinwei/codepen-fetcher-compatibility-test) for more details.
+

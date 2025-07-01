@@ -6,7 +6,7 @@
 
 An unofficial CodePen Node.js library built with TypeScript, capable of fetching the HTML, CSS, and JS source code of public Pens without authentication. It is designed for use in workflow automation tasks.
 
-This library uses a workaround to retrieve data via the `https://codepen.io/graphql` API, which may break if the API changes.
+This library uses a workaround to retrieve data via the `https://codepen.io/graphql` API.
 
 ## Installation
 ```bash
@@ -17,7 +17,7 @@ $ npm install codepen-fetcher
 ### Fetch a pen
 Fetch a pen by its `penId`, which can be found in the URL of the pen. For example, the `penId` of https://codepen.io/6chinwei/pen/gbYRQmN is `gbYRQmN`.
 
-```javascript
+```ts
 import { fetchPen } from 'codepen-fetcher';
 
 const penId = 'gbYRQmN';
@@ -25,7 +25,7 @@ const pen = await fetchPen(penId);
 console.log(pen);
 ```
 Example output is:
-```javascript
+```ts
 {
   access: 'Public',
   config: {
@@ -51,7 +51,7 @@ Note that the source code of the pen is stored in the `config` object.
 ### Fetch a user profile
 Fetch a CodePen user's profile (e.g., ID and Name) by their username.
 
-```javascript
+```ts
 import { fetchProfile } from 'codepen-fetcher';
 
 const username = '6chinwei';
@@ -59,7 +59,7 @@ const userProfile = await fetchProfile(username);
 console.log(userProfile);
 ```
 An example output is:
-```javascript
+```ts
 {
   avatar: 'https://assets.codepen.io/1103539/internal/avatars/users/default.png?format=auto&version=1734538260',
   bio: '',
@@ -72,16 +72,18 @@ An example output is:
 ```
 
 ### Fetch pens by user ID
-```javascript
+Fetch pens owned by a specific user (using their user ID, not username).
+
+```ts
 import { fetchPensByUserId } from 'codepen-fetcher';
+
 const userId = 'DEnXWE';
 const options = { limit: 5 };
-
 const pens = await fetchPensByUserId(userId, options);
 console.log(pens);
 ```
 An example output is:
-```javascript
+```ts
 [
   {
     access: 'Public',

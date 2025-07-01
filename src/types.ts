@@ -1,6 +1,6 @@
 export interface CodePenApi {
-  getPenById(penId: string): Promise<Pen>;
-  getProfileByUsername(username: string): Promise<UserProfile>;
+  getPenById(penId: string): Promise<Pen|null>;
+  getProfileByUsername(username: string): Promise<UserProfile|null>;
   getPensByUserId(userId: string, options?: FetchPensOptions): Promise<Pen[]>;
 }
 
@@ -56,12 +56,12 @@ export type UserProfile = {
 export type GetPenResponse = {
   data: {
     pen: Pen;
-  };
+  } | null;
 };
 
 export type GetProfileResponse = {
   data: {
-    ownerByUsername: UserProfile;
+    ownerByUsername: UserProfile|null;
   };
 };
 

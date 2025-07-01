@@ -57,6 +57,17 @@ describe('CodePenGraphqlApi', () => {
     expect(result).toEqual(pen);
   });
 
+  it('should return null if the pen does not exist', async () => {
+    const mockPenResponse: GetPenResponse = { data: null };
+
+    mockFetchJson(mockPenResponse);
+
+    const result = await api.getPenById('notExistPenId');
+
+    expect(result).toBeNull();
+
+  });
+
   it('should fetch a user profile by username', async () => {
     const profile: UserProfile = {
       id: '1',
@@ -74,6 +85,16 @@ describe('CodePenGraphqlApi', () => {
 
     expect(mockQueryBuilder.buildGetProfileByUsernameQuery).toHaveBeenCalledWith(profile.username);
     expect(result).toEqual(profile);
+  });
+
+  it('should return null if the user does not exist', async () => {
+    const mockProfileResponse: GetProfileResponse = { data: { ownerByUsername: null } };
+
+    mockFetchJson(mockProfileResponse);
+
+    const result = await api.getProfileByUsername('notExistUsername');
+
+    expect(result).toBeNull();
   });
 
   it('should fetch pens by user ID', async () => {
@@ -97,7 +118,7 @@ describe('CodePenGraphqlApi', () => {
     expect(result).toEqual(pens);
   });
 
-  it('should throw an error', async () => {
+  it('should throw an error if API responds error', async () => {
     const mockStatusCode = 404;
 
     mockFetchError(mockStatusCode, 'Not Found');

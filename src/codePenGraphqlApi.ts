@@ -61,16 +61,16 @@ export default class CodePenGraphqlApi implements CodePenApi {
     }
   }
 
-  public async getPenById (penId: string): Promise<Pen> {
+  public async getPenById (penId: string): Promise<Pen|null> {
     const payload = {
       query: this.apiQueryBuilder.buildGetPenByIdQuery(penId)
     };
     const result = await this.executeGraphqlQuery<GetPenResponse>(payload);
 
-    return result.data.pen;
+    return result.data?.pen || null;
   }
 
-  public async getProfileByUsername (username: string): Promise<UserProfile> {
+  public async getProfileByUsername (username: string): Promise<UserProfile|null> {
     const payload = {
       query: this.apiQueryBuilder.buildGetProfileByUsernameQuery(username)
     };

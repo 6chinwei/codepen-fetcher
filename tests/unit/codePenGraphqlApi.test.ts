@@ -34,19 +34,30 @@ describe('CodePenGraphqlApi', () => {
 
   it('should fetch a pen by ID', async () => {
     const pen: Pen = {
-      id: 'abc123',
-      title: 'Test Pen',
-      owner: { id: '1', username: 'test user' },
-      url: 'https://codepen.io/testpen',
+      access: 'public',
       config: {
         css: '',
         cssPreProcessor: '',
         head: '',
         html: '',
         js: '',
-        jsPreProcessor: ''
-      }
-    } as Pen;
+        jsPreProcessor: '',
+        scripts: [],
+        styles: [],
+      },
+      createdAt: '',
+      description: {
+        source: {
+          body: '',
+        },
+      },
+      id: 'abc123',
+      owner: { id: '1', username: 'test user' },
+      tags: [],
+      title: 'Test Pen',
+      updatedAt: '',
+      url: 'https://codepen.io/testpen',
+    };
     const mockPenResponse: GetPenResponse = { data: { pen } };
 
     mockFetchJson(mockPenResponse);

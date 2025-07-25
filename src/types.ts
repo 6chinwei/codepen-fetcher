@@ -13,6 +13,8 @@ export type Pen = {
     html: string;
     js: string;
     jsPreProcessor: string;
+    scripts: string[];
+    styles: string[];
   };
   createdAt: string;
   description: {

@@ -34,7 +34,11 @@ Example output is:
     head: '',
     html: '<h1>Hello World</h1>',
     js: "console.log('Hello World');",
-    jsPreProcessor: 'none'
+    jsPreProcessor: 'none',
+    scripts: [],
+    styles: [
+      'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css'
+    ]
   },
   createdAt: '2024-12-25 10:31:31 UTC',
   description: { source: { body: 'This is an example pen' } },
@@ -93,7 +97,11 @@ An example output is:
       head: '',
       html: '<h1>Hello World</h1>',
       js: "console.log('Hello World');",
-      jsPreProcessor: 'none'
+      jsPreProcessor: 'none',
+      scripts: [],
+      styles: [
+        'https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css'
+      ]
     },
     createdAt: '2024-12-25 10:31:31 UTC',
     description: { source: { body: 'This is an example pen' } },

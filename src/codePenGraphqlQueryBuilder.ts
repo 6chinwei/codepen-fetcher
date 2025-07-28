@@ -16,6 +16,8 @@ export default class CodePenGraphqlQueryBuilder {
       html: true,
       js: true,
       jsPreProcessor: true,
+      scripts: true,
+      styles: true,
     },
     createdAt: true,
     description: {

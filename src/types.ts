@@ -7,13 +7,21 @@ export interface CodePenApi {
 export type Pen = {
   access: string;
   config: {
+    /** The content in the CSS Editor */
     css: string;
+    /** The CSS preprocessor used */
     cssPreProcessor: string;
+    /** Stuff for `<head>` */
     head: string;
+    /** The content in the HTML Editor */
     html: string;
+    /** The content in the JavaScript Editor */
     js: string;
+    /** The JavaScript preprocessor used */
     jsPreProcessor: string;
+    /** The URL list of external scripts */
     scripts: string[];
+    /** The URL list of external stylesheets */
     styles: string[];
   };
   createdAt: string;

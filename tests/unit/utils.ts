@@ -20,15 +20,3 @@ export function mockFetchError (status: number, statusText?: string) {
   return vi.spyOn(globalThis, 'fetch')
     .mockResolvedValueOnce(mockResponse as unknown as Response);
 }
-
-export function mockFetchHtml (responseHtml: string, responseHeaders: string = '') {
-  const mockResponse = {
-    text: vi.fn().mockResolvedValue(responseHtml),
-    headers: {
-      get: vi.fn().mockReturnValue(responseHeaders)
-    }
-  };
-
-  return vi.spyOn(globalThis, 'fetch')
-    .mockResolvedValueOnce(mockResponse as unknown as Response);
-}

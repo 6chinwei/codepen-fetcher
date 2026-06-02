@@ -14,7 +14,7 @@ describe('CodePenGraphqlApi', () => {
     vi.resetAllMocks();
 
     mockApiRequestHeaders = {
-      setupCsrfHeaders: vi.fn().mockImplementation(() => {}),
+      setup: vi.fn(),
     } as unknown as ApiRequestHeaders;
 
     mockQueryBuilder = {
@@ -29,7 +29,7 @@ describe('CodePenGraphqlApi', () => {
   it('should initialize the API', async () => {
     await api.init();
 
-    expect(mockApiRequestHeaders.setupCsrfHeaders).toHaveBeenCalled();
+    expect(mockApiRequestHeaders.setup).toHaveBeenCalled();
   });
 
   it('should fetch a pen by ID', async () => {

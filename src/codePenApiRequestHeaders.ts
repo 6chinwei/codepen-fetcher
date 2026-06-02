@@ -2,68 +2,38 @@
  * Custom Headers for CodePen API requests.
  */
 export default class CodePenApiRequestHeaders extends Headers {
-  protected static readonly INDEX_PAGE_URL = 'https://codepen.io/';
+  /**
+   * A fixed CSRF token to simulate requests from an anonymous user
+   */
+  protected static readonly ANONYMOUS_USER_CSRF_TOKEN = 'OIHIb24mnHGF1w-X5WKfnE4oN-dM5q_iPR8Eaaj3MChgT1Uu8724bHmweCZ4BHV3PxFFsXvCUGiVX4ZvZVHIuQ';
+  /**
+   * A fixed Cookie values to simulate requests from an anonymous user
+   */
+  protected static readonly ANONYMOUS_USER_COOKIE = 'cp_session=xYNQ0AYZFVe6gwmZ--C21egLLUCutj6kat7A42d23sbU8ux9r9Rl088EFJR61SJEzhTZCVgk5JM%2BNXsKf9EmTWAorHZiEmuJVyFH2eDVHRuQIbHiaM5OCROgz4di9BWQN732jvOCw0z18zBfuj1BKCpKPc7w7TSBTycAq08EL%2F%2BZx8vwqZ%2B49uu%2B3vlkmPFJwOX06DAJWcX98p1LyHRNM1MiXXvZWC--auA%2FeEelrd2iEuAYu65V9A%3D%3D';
 
   constructor() {
     super();
+  }
 
-    // Set default headers
+  public async setup (): Promise<void> {
+    this.setupDefaultHeaders();
+    this.setupAnonymousUserCsrfHeaders();
+
+    // Keep return async for compatibility
+    return Promise.resolve();
+  }
+
+  protected setupDefaultHeaders (): void {
     this.set('Accept', '*/*');
     this.set('Content-Type', 'application/json');
     this.set('X-Requested-With', 'XMLHttpRequest');
   }
 
   /**
-   * Setup CSRF headers for subsequent API requests.
-   *
-   * This method sends a request to the CodePen index page
-   * to retrieve the CSRF token and cookie.
+   * Setup headers to bypass CSRF protection
    */
-  public async setupCsrfHeaders (): Promise<void> {
-    const response = await this.sendRequestToIndex();
-    const csrfToken = await this.findCsrfToken(response);
-    const csrfCookie = this.findCsrfCookie(response);
-
-    this.set('X-Csrf-Token', csrfToken);
-    this.set('Cookie', csrfCookie);
-
-    return;
-  }
-
-  protected async sendRequestToIndex (): Promise<Response> {
-    // Headers to open index page
-    const headers = {
-      'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'en-US,en;q=0.5',
-      'Accept-Encoding': 'gzip, deflate, br',
-      'Connection': 'keep-alive',
-      'Upgrade-Insecure-Requests': '1',
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Gecko/20100101 Firefox/112.0',
-    };
-
-    return await fetch(CodePenApiRequestHeaders.INDEX_PAGE_URL, { headers });
-  }
-
-  protected async findCsrfToken (response: Response): Promise<string> {
-    const html = await response.text();
-    const [, token] = (/<meta name="csrf-token"\s+content="([^"]+)"/.exec(html)) ?? [];
-
-    if (!token) {
-      throw new Error('CSRF token not found in HTML: ' + html);
-    }
-
-    return token;
-  }
-
-  protected findCsrfCookie (response: Response): string {
-    const cookieName = 'cp_session';
-    const cookieHeader = response.headers.get('set-cookie')?.split(',') ?? [];
-    const cookie = cookieHeader.find(cookie => cookie.startsWith(`${cookieName}=`))?.split(';')[0];
-
-    if (!cookie) {
-      throw new Error('CSRF cookie not found in `set-cookie` headers: ' + cookieHeader.join(', '));
-    }
-
-    return cookie;
+  protected setupAnonymousUserCsrfHeaders (): void {
+    this.set('X-Csrf-Token', CodePenApiRequestHeaders.ANONYMOUS_USER_CSRF_TOKEN);
+    this.set('Cookie', CodePenApiRequestHeaders.ANONYMOUS_USER_COOKIE);
   }
 }

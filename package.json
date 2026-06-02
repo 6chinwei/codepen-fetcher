@@ -8,7 +8,7 @@
     "build": "tsup src/index.ts --format esm --dts",
     "lint": "eslint . --ignore-pattern tests/integration",
     "test": "vitest --dir tests/unit",
-    "test:unit": "vitest run --dir tests/unit --coverage --coverage.reporter text",
+    "test:unit": "vitest run --dir tests/unit --coverage --coverage.reporter text --coverage.include=\"src/**/*.ts\"",
     "test:integration": "vitest run --dir tests/integration"
   },
   "engines": {

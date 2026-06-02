@@ -1,9 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { CodePenApi } from '../../src/types';
+import { describe, it, expect, vi, beforeEach, type MockedFunction } from 'vitest';
+import type { CodePenApi, Pen, UserProfile } from '../../src/types';
 
-// Allow MockCodePenApi to inherit all structure of CodePenApi
 type MockCodePenApi = {
-  [K in keyof CodePenApi]: ReturnType<typeof vi.fn> & CodePenApi[K];
+  [K in keyof CodePenApi]: MockedFunction<CodePenApi[K]>;
 };
 
 const mockCodePenApi: MockCodePenApi = {
@@ -24,7 +23,7 @@ describe('CodePen Fetcher', () => {
 
   it('fetchPen() should fetch a pen by its ID', async () => {
     const penId = '12345';
-    const pen = { id: penId, title: 'Test Pen' };
+    const pen = { id: penId, title: 'Test Pen' } as Pen;
 
     mockCodePenApi.getPenById.mockResolvedValue(pen);
 
@@ -38,7 +37,7 @@ describe('CodePen Fetcher', () => {
 
   it('fetchProfile() should fetch a user profile by username', async () => {
     const username = 'testuser';
-    const profile = { username, name: 'Test User' };
+    const profile = { username, name: 'Test User' } as UserProfile;
 
     mockCodePenApi.getProfileByUsername.mockResolvedValue(profile);
 
@@ -55,7 +54,7 @@ describe('CodePen Fetcher', () => {
     const pens = [
       { id: 'pen1', title: 'Pen 1' },
       { id: 'pen2', title: 'Pen 2' },
-    ];
+    ] as Pen[];
 
     mockCodePenApi.getPensByUserId.mockResolvedValue(pens);
 

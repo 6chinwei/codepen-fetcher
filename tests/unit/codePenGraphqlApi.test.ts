@@ -134,6 +134,6 @@ describe('CodePenGraphqlApi', () => {
 
     mockFetchError(mockStatusCode, 'Not Found');
 
-    await expect(() => api.getPenById('abc123')).rejects.toThrowError(`${mockStatusCode}`);
+    await expect(() => api.getPenById('abc123')).rejects.toThrow(`${mockStatusCode}`);
   });
 });

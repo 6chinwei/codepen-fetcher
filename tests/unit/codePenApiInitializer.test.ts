@@ -10,9 +10,9 @@ const mockApi: CodePenApi = {
 const mockInit = vi.fn().mockResolvedValue(mockApi);
 
 vi.mock('../../src/codePenGraphqlApi', () => ({
-  default: vi.fn().mockImplementation(() => ({
-    init: mockInit
-  })),
+  default: vi.fn(class {
+    init = mockInit;
+  }),
 }));
 vi.mock('../../src/codePenApiRequestHeaders', () => ({
   default: vi.fn(),

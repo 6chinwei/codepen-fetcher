@@ -17,7 +17,7 @@ export default class CodePenGraphqlApi implements CodePenApi {
   }
 
   public async init(): Promise<CodePenGraphqlApi> {
-    await this.apiRequestHeaders.setupCsrfHeaders();
+    await this.apiRequestHeaders.setup();
 
     return this;
   }
